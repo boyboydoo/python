@@ -12,15 +12,16 @@ window.tracer(0)  # turns off the screen updates
 # Create a snake head
 head = turtle.Turtle()
 head.speed(1)
-head.shape("square")
+head.penup()
+head.shape("circle")
 head.color("black")
 head.goto(50, 0)
-head.direction = "stop"
+# head.direction = "stop"
 
 
 def genxycoords():
-    randx = r.randint(-300, 300)
-    randy = r.randint(-300, 300)
+    randx = r.randint(-290, 290)
+    randy = r.randint(-290, 290)
     return randx, randy
 
 
@@ -29,36 +30,48 @@ def forward():
     head.setheading(0)
     position = head.pos()
     print(position[0])
-    if int(position[0]) == 280.0:
-        print("Game Over")
 
 
 def backward():
     head.setheading(180)
     position = head.pos()
     print(position[0])
-    if int(position[0]) == -290.0:
-        print("Game Over")
-    print("Moving Left")
 
 
 def upward():
     head.setheading(90)
     position = head.pos()
     print(position[1])
-    if int(position[1]) == 290.0:
-        print("Game Over")
-    print("Moving Up")
 
 
 def downward():
     head.setheading(270)
-    head.setheading(270)
     position = head.pos()
     print(position[1])
-    if int(position[1]) == -290.0:
-        print("Game Over")
-    print("Moving Downward")
+
+
+def move():
+    direction = head.heading()
+    xcor = head.xcor()
+    ycor = head.ycor()
+    print('direction', direction)
+    if direction == 0.0:
+        head.goto(xcor + 20, y)
+        print("right")
+    elif direction == 90.0:
+        head.goto(xcor, ycor + 20)
+        print("up")
+    elif direction == 180.0:
+        head.goto(xcor - 20, ycor)
+        print("left")
+    else:
+        head.goto(xcor, ycor - 20)
+        print("down")
+
+    window.onkey(forward, "Right")
+    window.onkey(backward, "Left")
+    window.onkey(upward, "Up")
+    window.onkey(downward, "Down")
 
 
 def quit():
@@ -74,44 +87,49 @@ food.setpos(20, 10)
 
 
 snakes = []
+snakes.append(head)
 
 
 def elongateBody(x,y):
+    print("Elongate")
     body = turtle.Turtle()
     body.shape("circle")
     body.speed(1)
+    body.penup()
     body.color("cyan")
     body.goto(x, y)
+
     snakes.append(body)
 
 
 while True:
-    head.forward(20)
     if head.distance(food) < 20:
         x,y = genxycoords()
         food.goto(x,y)
         hx = head.xcor()
         hy = head.ycor()
-        elongateBody(hx-10,hy)
+        elongateBody(hx,hy)
 
-    print(len(snakes))
     for i in range(len(snakes)-1, 0, -1):
+        # print("Inside for loop")
         x = snakes[i-1].xcor()
         y = snakes[i-1].ycor()
         snakes[i].goto(x, y)
-        # print("kiran")
 
-    print("Length", len(snakes))
+    # print("Length", len(snakes))
     if len(snakes) > 0:
         # print("Wajapey")
         x = head.xcor()
         y = head.ycor()
-        snakes[0].goto(x,y)
+        # print("y",y)
+        print("x:", x, " y:", y)
 
-    window.onkey(forward, "Right")
-    window.onkey(backward, "Left")
-    window.onkey(upward, "Up")
-    window.onkey(downward, "Down")
+        # snakes[0].goto(x,y)
+        # snakes[0].forward(20)
+        # print(snakes[0].setheading())
+        move()
+
+
     t.sleep(0.3)
     window.listen()
     window.update()
