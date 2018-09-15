@@ -50,23 +50,33 @@ def downward():
     print(position[1])
 
 
-def move():
-    direction = head.heading()
-    xcor = head.xcor()
-    ycor = head.ycor()
-    print('direction', direction)
+def moveSnake():
+    direction = snakes[0].heading()
+    xcor = snakes[0].xcor()
+    ycor = snakes[0].ycor()
+
+    print(xcor,ycor)
+
+    if abs(xcor) == 280 or abs(ycor) == 280:
+        print("Game Over")
+        for i in len(snakes):
+            snakes[i].remove()
+
+    # print('direction', direction)
     if direction == 0.0:
-        head.goto(xcor + 20, y)
+        snakes[0].goto(xcor + 10, y)
         print("right")
     elif direction == 90.0:
-        head.goto(xcor, ycor + 20)
+        snakes[0].goto(xcor, ycor + 10)
         print("up")
     elif direction == 180.0:
-        head.goto(xcor - 20, ycor)
+        snakes[0].goto(xcor - 10, ycor)
         print("left")
     else:
-        head.goto(xcor, ycor - 20)
+        snakes[0].goto(xcor, ycor - 10)
         print("down")
+
+
 
     window.onkey(forward, "Right")
     window.onkey(backward, "Left")
@@ -121,16 +131,8 @@ while True:
         # print("Wajapey")
         x = head.xcor()
         y = head.ycor()
-        # print("y",y)
-        print("x:", x, " y:", y)
-
-        # snakes[0].goto(x,y)
-        # snakes[0].forward(20)
-        # print(snakes[0].setheading())
-        move()
-
-
-    t.sleep(0.3)
+        moveSnake()
+    t.sleep(1)
     window.listen()
     window.update()
 
